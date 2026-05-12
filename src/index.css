@@ -1,19 +1,219 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
+/* ─── Design tokens (light mode) ─────────────────────────────────────────── */
 @theme {
-  --color-primary: #1d4ed8;
-  --color-primary-dark: #1e40af;
-  --color-bg-light: #f9fafb;
-  --color-bg-white: #ffffff;
-  --color-text-dark: #111827;
-  --color-text-muted: #6b7280;
-  --color-border: #e5e7eb;
-  
+  --color-primary:      #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-bg-light:     #f8f9fb;
+  --color-bg-white:     #ffffff;
+  --color-text-dark:    #111827;
+  --color-text-muted:   #6b7280;
+  --color-border:       #e5e7eb;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/* ─── Base & fonts ────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    /* ── Light mode surface tokens ──────────────────────────────────────── */
+    --surface-page:     #f8f9fb;
+    --surface-card:     #ffffff;
+    --surface-raised:   #f3f4f6;
+    --surface-sunken:   #f1f3f5;
+    --border-subtle:    #e5e7eb;
+    --border-strong:    #d1d5db;
+    --text-primary:     #111827;
+    --text-secondary:   #374151;
+    --text-muted:       #6b7280;
+    --text-faint:       #9ca3af;
+    --accent:           #2563eb;
+    --accent-soft:      rgba(37, 99, 235, 0.1);
+  }
+
+  /* ════════════════════════════════════════════════════════════════════════
+     DARK MODE — Warm Charcoal-Violet palette
+     Inspired by Linear & Raycast: deep warmth, never cold blue-gray
+  ════════════════════════════════════════════════════════════════════════ */
+  html.dark {
+    --surface-page:    #13121a;   /* deepest background — warm near-black     */
+    --surface-card:    #1c1b26;   /* cards & panels                            */
+    --surface-raised:  #232232;   /* inputs, dropdowns, hover states           */
+    --surface-sunken:  #110f1a;   /* inset wells                               */
+    --border-subtle:   #2a2840;   /* soft purple-tinted borders                */
+    --border-strong:   #3a3754;   /* more visible borders                      */
+    --text-primary:    #f4f2ff;   /* near-white warm lavender — max readability */
+    --text-secondary:  #cec9f0;   /* bright secondary text                      */
+    --text-muted:      #a09cbf;   /* readable muted — not washed out             */
+    --text-faint:      #6b6885;   /* placeholder / decorative                   */
+    --accent:          #6d8ff0;   /* softer blue — readable on dark surfaces   */
+    --accent-soft:     rgba(109, 143, 240, 0.12);
+  }
+
+  /* ── Apply tokens to Tailwind utility classes in dark mode ─────────────── */
+  html.dark body {
+    background-color: var(--surface-page);
+    color: var(--text-primary);
+  }
+
+  /* Surfaces */
+  html.dark .bg-white              { background-color: var(--surface-card)   !important; }
+  html.dark .bg-gray-50,
+  html.dark .bg-gray-50\/40        { background-color: var(--surface-page)   !important; }
+  html.dark .bg-gray-50\/50        { background-color: rgba(28,27,38,.6)     !important; }
+  html.dark .bg-gray-100           { background-color: var(--surface-raised) !important; }
+  html.dark .bg-gray-200           { background-color: var(--border-subtle)  !important; }
+  html.dark .hover\:bg-gray-200:hover { background-color: var(--border-strong) !important; }
+
+  /* Borders */
+  html.dark .border-gray-100,
+  html.dark .border-gray-200       { border-color: var(--border-subtle) !important; }
+  html.dark .border-gray-300       { border-color: var(--border-strong) !important; }
+  html.dark .divide-gray-100       { border-color: var(--border-subtle) !important; }
+
+  /* Text — standard gray scale */
+  html.dark .text-gray-900         { color: var(--text-primary)   !important; }
+  html.dark .text-gray-800         { color: #dddafc               !important; }
+  html.dark .text-gray-700         { color: var(--text-secondary) !important; }
+  html.dark .text-gray-600         { color: #b0accc               !important; }
+  html.dark .text-gray-500,
+  html.dark .text-gray-400         { color: var(--text-muted)     !important; }
+
+  /* ── CRITICAL: Custom @theme token overrides ───────────────────────────────
+     text-text-dark  → --color-text-dark: #111827 (near-black, invisible in dark)
+     text-text-muted → --color-text-muted: #6b7280 (too dim in dark)
+     These classes are used across Home, Profile, SchemeDetail, etc.
+  ─────────────────────────────────────────────────────────────────────────── */
+  html.dark .text-text-dark        { color: var(--text-primary)   !important; }
+  html.dark .text-text-muted       { color: var(--text-muted)     !important; }
+
+  /* Background tokens */
+  html.dark .bg-bg-light           { background-color: var(--surface-page) !important; }
+  html.dark .bg-bg-white           { background-color: var(--surface-card) !important; }
+
+  /* Border token */
+  html.dark .border-border         { border-color: var(--border-subtle) !important; }
+
+  /* Hover variants of text-text-dark */
+  html.dark .hover\:text-text-dark:hover { color: var(--text-primary) !important; }
+
+  /* Heading elements — catch-all so h1/h2/h3 are always bright */
+  html.dark h1,
+  html.dark h2,
+  html.dark h3,
+  html.dark h4 {
+    color: var(--text-primary) !important;
+  }
+
+  /* ── SmartAssistant chat history sidebar ──────────────────────────────────
+     Removed hardcoded navy gradient; replaced with warm indigo-charcoal
+     that is visually distinct from the main content but still harmonious.
+  ─────────────────────────────────────────────────────────────────────────── */
+  html.dark .shrink-0.hidden.md\:flex.flex-col.overflow-hidden {
+    background: linear-gradient(180deg, #1a1928 0%, #1e1d2e 100%) !important;
+    border-right: 1px solid #2a2840;
+  }
+
+  /* ── Sidebar (AppLayout sidebar) ───────────────────────────────────────── */
+  html.dark aside.fixed {
+    background-color: var(--surface-card) !important;
+    border-right-color: var(--border-subtle) !important;
+  }
+
+  /* ── Topbar ─────────────────────────────────────────────────────────────── */
+  html.dark header {
+    background-color: var(--surface-card) !important;
+    border-bottom-color: var(--border-subtle) !important;
+  }
+
+  /* ── Search input ───────────────────────────────────────────────────────── */
+  html.dark input[type="text"],
+  html.dark input[type="email"],
+  html.dark input[type="password"],
+  html.dark input[type="number"],
+  html.dark input[type="date"],
+  html.dark select,
+  html.dark textarea {
+    background-color: var(--surface-raised) !important;
+    border-color:     var(--border-subtle)  !important;
+    color:            var(--text-primary)   !important;
+  }
+  html.dark input::placeholder { color: var(--text-faint) !important; }
+
+  html.dark input:focus,
+  html.dark select:focus,
+  html.dark textarea:focus {
+    border-color:  var(--accent) !important;
+    box-shadow:    0 0 0 3px var(--accent-soft) !important;
+  }
+
+  /* ── Buttons & interactive ──────────────────────────────────────────────── */
+  html.dark .hover\:bg-gray-50:hover   { background-color: var(--surface-raised) !important; }
+  html.dark .hover\:bg-gray-100:hover  { background-color: var(--surface-raised) !important; }
+
+  /* ── Shadows ─────────────────────────────────────────────────────────────── */
+  html.dark .shadow-sm  { box-shadow: 0 1px 3px rgba(0,0,0,.4),  0 1px 2px rgba(0,0,0,.3)  !important; }
+  html.dark .shadow-md  { box-shadow: 0 4px 12px rgba(0,0,0,.5), 0 2px 4px rgba(0,0,0,.3)  !important; }
+  html.dark .shadow-2xl { box-shadow: 0 20px 60px rgba(0,0,0,.7), 0 8px 20px rgba(0,0,0,.4) !important; }
+
+  /* ── Primary colour adjustments for dark surfaces ───────────────────────── */
+  html.dark .text-primary    { color: var(--accent) !important; }
+  html.dark .border-primary  { border-color: var(--accent) !important; }
+  html.dark .bg-primary      { background-color: var(--accent) !important; }
+  html.dark .bg-primary\/8   { background-color: var(--accent-soft) !important; }
+  html.dark .bg-primary\/10  { background-color: var(--accent-soft) !important; }
+  html.dark .bg-primary\/15  { background-color: rgba(109,143,240,.15) !important; }
+  html.dark .bg-primary\/5   { background-color: rgba(109,143,240,.07) !important; }
+
+  /* ── Scheme category badge overrides (dark) ─────────────────────────────── */
+  html.dark .bg-green-50   { background-color: rgba(16,185,129,.1) !important; }
+  html.dark .bg-blue-50    { background-color: rgba(96,165,250,.1)  !important; }
+  html.dark .bg-red-50     { background-color: rgba(248,113,113,.1) !important; }
+  html.dark .bg-orange-50  { background-color: rgba(251,146,60,.1)  !important; }
+  html.dark .bg-purple-50  { background-color: rgba(167,139,250,.1) !important; }
+  html.dark .bg-indigo-50  { background-color: rgba(129,140,248,.1) !important; }
+  html.dark .bg-pink-50    { background-color: rgba(244,114,182,.1) !important; }
+  html.dark .bg-yellow-50  { background-color: rgba(250,204,21,.1)  !important; }
+  html.dark .bg-teal-50    { background-color: rgba(45,212,191,.1)  !important; }
+  html.dark .bg-cyan-50    { background-color: rgba(34,211,238,.1)  !important; }
+  html.dark .bg-emerald-50 { background-color: rgba(52,211,153,.1)  !important; }
+  html.dark .bg-amber-50   { background-color: rgba(251,191,36,.1)  !important; }
+
+  /* ── Scrollbar (dark) ───────────────────────────────────────────────────── */
+  html.dark ::-webkit-scrollbar        { width: 6px; height: 6px; }
+  html.dark ::-webkit-scrollbar-track  { background: var(--surface-page); }
+  html.dark ::-webkit-scrollbar-thumb  { background: var(--border-strong); border-radius: 3px; }
+  html.dark ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+}
+
+/* ─── Density: compact ───────────────────────────────────────────────────── */
+html[data-density='compact']        { font-size: 13px; }
+html[data-density='compact'] .p-6   { padding: 1rem    !important; }
+html[data-density='compact'] .p-8   { padding: 1.25rem !important; }
+html[data-density='compact'] .py-3  { padding-top: .5rem !important; padding-bottom: .5rem !important; }
+html[data-density='compact'] .gap-6 { gap: .75rem !important; }
+
+/* ─── Density: spacious ──────────────────────────────────────────────────── */
+html[data-density='spacious']        { font-size: 15.5px; }
+html[data-density='spacious'] .p-6   { padding: 2rem    !important; }
+html[data-density='spacious'] .py-3  { padding-top: .9rem !important; padding-bottom: .9rem !important; }
+html[data-density='spacious'] .gap-6 { gap: 2rem !important; }
+
+/* ─── Base body ──────────────────────────────────────────────────────────── */
 @layer base {
   body {
-    @apply bg-bg-light text-text-dark font-sans;
+    font-family: var(--font-sans);
+    background-color: var(--surface-page, #f8f9fb);
+    color: var(--text-primary, #111827);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Light mode scrollbar */
+  ::-webkit-scrollbar        { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track  { background: transparent; }
+  ::-webkit-scrollbar-thumb  { background: #d1d5db; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 }
