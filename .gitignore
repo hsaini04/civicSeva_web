@@ -12,6 +12,28 @@ dist
 dist-ssr
 *.local
 
+# Node / React
+.env
+.env.*
+!.env.example
+coverage
+.nyc_output
+.eslintcache
+.cache
+.parcel-cache
+.turbo
+.vite
+*.tsbuildinfo
+
+# Package manager artifacts
+.npm
+.pnpm-store
+.yarn
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
